@@ -1,7 +1,25 @@
+import { i18n } from './i18n'
 import { sdk } from './sdk'
+import { uiPort } from './utils'
 
-// This package exposes no network interfaces, so it returns an empty list. To
-// add one, bind a port with a host (e.g. `sdk.MultiHost.of(...)`), create an
-// interface with `sdk.createInterface`, export it, and return its receipt(s)
-// here. See start-technologies/projects/start-sdk/docs/src/interfaces.md.
-export const setInterfaces = sdk.setupInterfaces(async () => [])
+export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
+  const uiMulti = sdk.MultiHost.of(effects, 'main')
+  const uiMultiOrigin = await uiMulti.bindPort(uiPort, {
+    protocol: 'http',
+  })
+  const ui = sdk.createInterface(effects, {
+    name: i18n('Web Interface'),
+    id: 'ui',
+    description: i18n(
+      'The FMD Server web interface, and the address the FMD app registers with',
+    ),
+    type: 'ui',
+    masked: false,
+    schemeOverride: null,
+    username: null,
+    path: '',
+    query: {},
+  })
+
+  return [await uiMultiOrigin.export([ui])]
+})

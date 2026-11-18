@@ -1,25 +1,22 @@
 import { setupManifest } from '@start9labs/start-sdk'
 import { long, short } from './i18n'
 
+const dockerImage = 'registry.gitlab.com/fmd-foss/fmd-server'
+const dockerVersion = '0.17.1'
+
 export const manifest = setupManifest({
   id: 'fmd-server',
   title: 'FMD Server',
-  license: 'MIT', // TODO: match the upstream project's license
-  packageRepo: 'https://github.com/REPLACE_ME/fmd-server-startos', // TODO: set the packaging repo URL
-  upstreamRepo: 'https://github.com/REPLACE_ME/REPLACE_ME', // TODO: set the upstream project URL
-  marketingUrl: 'https://REPLACE_ME', // TODO: set or remove
-  donationUrl: 'https://REPLACE_ME', // TODO: set or remove
+  license: 'GPL-3.0-or-later',
+  packageRepo: 'https://github.com/Start9Labs/fmd-server-startos',
+  upstreamRepo: 'https://gitlab.com/fmd-foss/fmd-server',
+  marketingUrl: 'https://fmd-foss.org',
+  donationUrl: 'https://liberapay.com/FMD',
   description: { short, long },
-  // 'example-volume' is an arbitrary id — name volumes whatever suits the
-  // service. It must match the volumeId mounted in startos/main.ts and the
-  // volume backed up in startos/backups.ts.
-  volumes: ['example-volume'],
+  volumes: ['main'],
   images: {
-    // 'example-image' is an arbitrary id — it must match the imageId used in
-    // startos/main.ts. TODO: replace the hello-world image with your service's
-    // image — set dockerTag (or add a Dockerfile) and rename this key.
-    'example-image': {
-      source: { dockerTag: 'ghcr.io/start9labs/hello-world:2.0.0' },
+    'fmd-server': {
+      source: { dockerTag: `${dockerImage}:${dockerVersion}` },
       arch: ['x86_64', 'aarch64'],
     },
   },

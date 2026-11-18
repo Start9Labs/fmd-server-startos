@@ -1,18 +1,24 @@
 # Updating the upstream version
 
-<!--
-TODO: Describe what "upstream" means for FMD Server (a Docker image pinned by tag, a git
-submodule, or a self-built image) and how to track its version, one subsection per pinned
-source. This file is the bump recipe and nothing else: no version, migration or release-note
-rules, no test plan, no design notes. See project-structure.md § UPDATING.md in the packaging
-guide. Remove these comments.
--->
-
 ## Determining the upstream version
 
-<!-- TODO: where the current pin lives in startos/manifest/index.ts, and how to fetch the
-     latest upstream version (e.g. `gh release view -R <org>/<repo> --json tagName -q .tagName`). -->
+The pin is `dockerVersion` in `startos/manifest/index.ts`, a tag of `registry.gitlab.com/fmd-foss/fmd-server`. Upstream tags images without a `v` prefix (`0.17.1`), while its GitLab releases carry one (`v0.17.1`).
+
+Read the latest release:
+
+```bash
+curl -s 'https://gitlab.com/api/v4/projects/fmd-foss%2Ffmd-server/releases?per_page=1' | jq -r '.[0].tag_name'
+```
+
+Confirm the image tag exists for both architectures before pinning it:
+
+```bash
+docker manifest inspect registry.gitlab.com/fmd-foss/fmd-server:<version> | jq -r '.manifests[].platform.architecture'
+```
 
 ## Applying the bump
 
-<!-- TODO: the exact file and field to edit, including any tag-format quirks. -->
+1. Set `dockerVersion` in `startos/manifest/index.ts` to the release without its `v`.
+2. Set the version in `startos/versions/current.ts` to `<version>:0` and rewrite its release notes.
+3. Read the release's notes and `config.example.yml` at the new tag for added, renamed or removed config keys, and reflect any that matter in `startos/fileModels/config.yml.ts`.
+4. Check that `fmd-server-ctl listusers` still prints its table to stdout in the format `listAccounts` in `startos/utils.ts` parses.
