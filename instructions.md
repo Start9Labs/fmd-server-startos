@@ -32,7 +32,7 @@ Sign in with a device's account ID and password to see its last locations and pi
 - **Generate Registration Token** — creates a new token. Run it whenever you need the token to register another device. A new token replaces the old one for future registrations only; devices that are already registered keep working.
 - **Settings** — how many locations and pictures the server keeps for each device, and an optional custom map tile server for the web interface. The service restarts to apply changes.
 - **List Accounts** — every registered device account and when the server last heard from it. An account that has never uploaded anything shows as never seen.
-- **Delete Account** — permanently deletes an account and everything stored for it. Use it to remove an old device. The phone has to register again to use this server afterwards.
+- **Delete Account** — permanently deletes an account and everything stored for it. Stop the service first, delete the account, then start the service again. Use it to remove an old device. The phone has to register again to use this server afterwards.
 
 ### Keeping your home IP private
 

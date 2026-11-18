@@ -28,7 +28,8 @@ export const deleteAccount = sdk.Action.withInput(
     warning: i18n(
       'This cannot be undone. The device must register again to use this server.',
     ),
-    allowedStatuses: 'any',
+    // Old sessions must not authenticate a replacement account with the same ID.
+    allowedStatuses: 'only-stopped',
     group: i18n('Accounts'),
     visibility: 'enabled',
   }),
@@ -47,7 +48,7 @@ export const deleteAccount = sdk.Action.withInput(
       throw new Error(i18n('No account with this ID exists'))
     }
 
-    await runCtl(effects, ['deleteusers', account], 'delete\n')
+    await runCtl(effects, ['deleteusers', '--', account], 'delete\n')
 
     return {
       version: '1',

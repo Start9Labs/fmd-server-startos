@@ -41,7 +41,7 @@ const inputSpec = InputSpec.of({
     placeholder: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     patterns: [
       {
-        regex: '^https://.*\\{z\\}.*\\{x\\}.*\\{y\\}.*$',
+        regex: '^https://(?=.*\\{z\\})(?=.*\\{x\\})(?=.*\\{y\\}).*$',
         description: i18n(
           'Must be an https:// URL containing {z}, {x} and {y}',
         ),
